@@ -3,7 +3,7 @@
 #define NumRegisters 4
 #define NumMemoryLocations 8
 #define MaxInstructionLength 8
-void main(){
+int main(){
   int registers[NumRegisters];//registers
   int memmory[NumMemoryLocations];//memory NumMemoryLocations
   char instruction[MaxInstructionLength];//inputted instruction
@@ -13,7 +13,7 @@ void main(){
   char *toMove = "MOVE";
   char *toAdd = "ADD";
   char *toSubtract = "SUB";
-  char *toMultiply = "MUL"
+  char *toMultiply = "MUL";
   char *toDivide = "DIV";
   char *toMod = "MOD";
   char *toCompare = "COMP";
@@ -26,4 +26,5 @@ void main(){
     printf("This is what you entered = %s\n", instruction);
     scanf("%s",instruction);
   }
+  return 0;
 }
