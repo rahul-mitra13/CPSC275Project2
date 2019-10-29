@@ -13,7 +13,7 @@ void main(){
   char *toMove = "MOVE";
   char *toAdd = "ADD";
   char *toSubtract = "SUB";
-  char *toMultiply = "MUL"
+  char *toMultiply = "MUL";
   char *toDivide = "DIV";
   char *toMod = "MOD";
   char *toCompare = "COMP";
@@ -22,7 +22,7 @@ void main(){
   int sg = 0;//sign flag
   int of = 0;//overflow flag
   scanf("%s",instruction);
-  while (strcmp(instruction, toQuit) != 0){
+  while (strcasecmp(instruction, toQuit) != 0){
     printf("This is what you entered = %s\n", instruction);
     scanf("%s",instruction);
   }
