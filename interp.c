@@ -3,9 +3,13 @@
 #define NumRegisters 4
 #define NumMemoryLocations 8
 #define MaxInstructionLength 8
-int main(){
-  int registers[NumRegisters];//registers
-  int memmory[NumMemoryLocations];//memory NumMemoryLocations
+#define numFlags 3
+void print(int a[],int b[], int c[]);
+void main(){
+  //asci value of question mark is 63
+  int registers[NumRegisters] = {63,63,63,63};//registers
+  int memory[NumMemoryLocations] = {63,63,63,63,63,63,63,63};//memory NumMemoryLocations
+  int flags[numFlags] = {0, 0, 0};//to store all the flags
   char instruction[MaxInstructionLength];//inputted instruction
   char *toRead = "READ";
   char *toWrite = "WRITE";
@@ -22,9 +26,34 @@ int main(){
   int sg = 0;//sign flag
   int of = 0;//overflow flag
   scanf("%s",instruction);
-  while (strcasecmp(instruction, toQuit) != 0){
-    printf("This is what you entered = %s\n", instruction);
+  while (strcasecmp(instruction, toQuit) != 0){//keep going until the user enters quit
+    if (strcasecmp(instruction, toPrint) == 0){//if the inpu command is to print
+      print(registers, memory, flags);
+    }
     scanf("%s",instruction);
   }
-  return 0;
+}
+void print(int a[], int b[], int c[]){
+  int i;
+  for ( i = 0; i < NumRegisters; i++){
+       printf("%c\t",a[i]);
+  }
+  for ( i = 0; i < NumMemoryLocations; i++){
+    printf("%c\t",b[i]);
+  }
+  for ( i = 0; i < numFlags; i++){
+    printf("%d\t",c[i]);
+  }
+  printf("\n");
+  printf("--\t--\t--\t--\t--\t--\t--\t--\t--\t--\t--\t--\t--\t--\t--\n");
+  for ( i = 0; i < NumRegisters; i++){
+       printf("R%d\t",i);
+  }
+  for ( i = 0; i < NumMemoryLocations; i++){
+    printf("M%d\t",i);
+  }
+  printf("ZF\t");
+  printf("SF\t");
+  printf("OF\t");
+  printf("\n");
 }
