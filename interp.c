@@ -13,7 +13,7 @@ void main(){
   char *toMove = "MOVE";
   char *toAdd = "ADD";
   char *toSubtract = "SUB";
-  char *toMultiply = "MUL"
+  char *toMultiply = "MUL";
   char *toDivide = "DIV";
   char *toMod = "MOD";
   char *toCompare = "COMP";
