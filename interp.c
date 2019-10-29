@@ -10,7 +10,7 @@ void main(){
   int registers[NumRegisters] = {63,63,63,63};//registers
   int memory[NumMemoryLocations] = {63,63,63,63,63,63,63,63};//memory NumMemoryLocations
   int flags[numFlags] = {0, 0, 0};//to store all the flags
-  char instruction[MaxInstructionLength];//inputted instruction
+  char instruction[MaxInstructionLength];//inputted raw instruction
   char *toRead = "READ";
   char *toWrite = "WRITE";
   char *toPrint = "PRINTS";
@@ -27,12 +27,14 @@ void main(){
   int of = 0;//overflow flag
   scanf("%s",instruction);
   while (strcasecmp(instruction, toQuit) != 0){//keep going until the user enters quit
-    if (strcasecmp(instruction, toPrint) == 0){//if the inpu command is to print
+    if (strcasecmp(instruction, toPrint) == 0){//if the input command is to print
       print(registers, memory, flags);
     }
     scanf("%s",instruction);
+
   }
 }
+/*function that is called when input is prints*/
 void print(int a[], int b[], int c[]){
   int i;
   for ( i = 0; i < NumRegisters; i++){
