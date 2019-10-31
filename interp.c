@@ -1,11 +1,13 @@
 #include<stdio.h>
 #include<string.h>
+#include<stdlib.h>
 #define NumRegisters 4
 #define NumMemoryLocations 8
 #define MaxInstructionLength 8
 #define numFlags 3
 void print(int a[],int b[], int c[]);
 int split(char a[],char b[3][8]);//where a is the original string and b is the tokenized string
+void read(int a[], int pos, int num);
 int main(){
   int registers[NumRegisters] = {128,128,128,128};//registers
   int memory[NumMemoryLocations] = {128,128,128,128,128,128,128,128};//memory NumMemoryLocations
@@ -29,19 +31,36 @@ int main(){
   int sg = 0;//sign flag
   int of = 0;//overflow flag
   int tester;
-  scanf(" %[^\n]s",instruction);
-  size = split(instruction, instructionAfterParsing);
-  printf("This is the size %d\n",size);
-      for (i = 0; i < size; i++){
-        printf("%s\n",instructionAfterParsing[i]);
-      }
-  scanf("%d",&tester);
-  scanf(" %[^\n]s",instruction);
-  size = split(instruction, instructionAfterParsing);
-  printf("This is the size %d\n",size);
-    for (i = 0; i < size; i++){
-        printf("%s\n",instructionAfterParsing[i]);
+  while (1){
+    scanf(" %[^\n]s",instruction);
+    size = split(instruction, instructionAfterParsing);
+    //quit command
+    if ((strcasecmp(instructionAfterParsing[0],toQuit) == 0) && size == 1){//if the command is to quit
+      break;
     }
+    else if ((strcasecmp(instructionAfterParsing[0],toQuit) == 0) && size != 1){//syntax error if there is any argument to quit
+      printf("???\n");
+    }
+    //print command
+    else if ((strcasecmp(instructionAfterParsing[0],toPrint) == 0) && size == 1){//if the command is to print
+      print(registers,memory,flags);
+    }
+    else if ((strcasecmp(instructionAfterParsing[0],toPrint) == 0) && size != 1){//syntax error if there is any argument to print
+      printf("???\n");
+    }
+    //read command
+    else if ((strcasecmp(instructionAfterParsing[0],toRead) == 0) && size == 3){//if the command is to print
+      if ( instructionAfterParsing[2][0] == 'm'){
+        read(memory,(instructionAfterParsing[2][1]-'0'),atoi(instructionAfterParsing[1]));//goes array position num
+      }
+      else if ( instructionAfterParsing[2][0] == 'r'){
+        read(registers,(instructionAfterParsing[2][1]-'0'),atoi(instructionAfterParsing[1]));//goes array position num
+      }
+    }
+    else if ((strcasecmp(instructionAfterParsing[0],toRead) == 0) && size != 3){//if there is an illegal number of arguments
+        printf("???\n");
+    }
+   }
     return 0;
 }
 
@@ -61,11 +80,16 @@ void print(int a[], int b[], int c[]){
       printf("?\t");
     }
     else{
-    printf("%c\t",b[i]);
+    printf("%d\t",b[i]);
     }
   }
   for ( i = 0; i < numFlags; i++){
+    if (c[i] != 0 && c[i] != 1){
+      printf("0\t");
+    }
+    else{
     printf("%d\t",c[i]);
+    }
   }
   printf("\n");
   printf("--\t--\t--\t--\t--\t--\t--\t--\t--\t--\t--\t--\t--\t--\t--\n");
@@ -89,4 +113,8 @@ int split(char a[], char b[3][8]){
     token = strtok(NULL," ,\n");
   }
   return k;
+}
+/*this function is used to implement the read command */
+void read (int a[],int pos,int num){
+  a[pos] = num;
 }
