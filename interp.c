@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
+#include<ctype.h>
 #define NumRegisters 4
 #define NumMemoryLocations 8
 #define MaxInstructionLength 8
@@ -9,9 +10,13 @@ void print(int a[],int b[], int c[]);
 int split(char a[],char b[100][100]);//where a is the original string and b is the tokenized string
 void read(int a[], int pos, int num);
 void write(int a[], int pos);
-void add(int a[], int b[], int num1, int c[], int num2);
-void subtract(int a[], int b[], int num1, int c[], int num2);
-void multiply(int a[], int b[], int num1, int c[], int num2);
+void add(int flags[],int a[], int b[], int num1, int c[], int num2);
+void subtract(int flags[],int a[], int b[], int num1, int c[], int num2);
+void multiply(int flags[],int a[], int b[], int num1, int c[], int num2);
+void divide(int flags[],int a[], int b[], int num1, int c[], int num2);
+void mod(int flags[],int a[], int b[], int num1, int c[], int num2);
+void move(int b[], int num1, int c[], int num2);
+void comp(int flags[], int registers[], int pos1, int pos2);
 
 int main(){
   int flags[numFlags] = {0, 0, 0};//to store all the flags
@@ -27,14 +32,11 @@ int main(){
   char toMove[] = "MOVE";
   char toAdd[] = "ADD";
   char toSubtract[] = "SUB";
-  char toMultiply[] = "MUL";
+  char toMultiply[] = "MULT";
   char toDivide[] = "DIV";
   char toMod[] = "MOD";
   char toCompare[] = "COMP";
   char toQuit[] = "QUIT";
-  int zf = 0;//zero flag
-  int sg = 0;//sign flag
-  int of = 0;//overflow flag
   int tester;
   while (1){//infinite loop until user quits
     scanf(" %[^\n]s",instruction);
@@ -55,10 +57,10 @@ int main(){
     }
     //read command
     else if ((strcasecmp(instructionAfterParsing[0],toRead) == 0) && size == 3){//if the command is to print
-      if ( instructionAfterParsing[2][0] == 'm'){
+      if ( tolower(instructionAfterParsing[2][0]) == 'm'){
         read(memory,(instructionAfterParsing[2][1]-'0'),atoi(instructionAfterParsing[1]));//goes array,position,num
       }
-      else if ( instructionAfterParsing[2][0] == 'r'){
+      else if ( tolower(instructionAfterParsing[2][0]) == 'r'){
         read(registers,(instructionAfterParsing[2][1]-'0'),atoi(instructionAfterParsing[1]));//goes array,position,num
       }
     }
@@ -67,10 +69,10 @@ int main(){
     }
     //write command
     else if ((strcasecmp(instructionAfterParsing[0],toWrite)) == 0 && size == 2){//if the input command is to write
-      if (instructionAfterParsing[1][0] == 'm'){
+      if (tolower(instructionAfterParsing[1][0]) == 'm'){
         write(memory,(instructionAfterParsing[1][1] - '0'));
       }
-      else if (instructionAfterParsing[1][0] == 'r'){
+      else if (tolower(instructionAfterParsing[1][0]) == 'r'){
         write(registers, (instructionAfterParsing[1][1] - '0'));
       }
     }
@@ -79,16 +81,16 @@ int main(){
     }
     //add command
     else if ((strcasecmp(instructionAfterParsing[0], toAdd) == 0) && size == 3){
-      if ( instructionAfterParsing[1][0] == 'm' && instructionAfterParsing[2][0] == 'r'){
-        add(registers, memory, (instructionAfterParsing[1][1] - '0'), registers, (instructionAfterParsing[2][1] - '0'));
+      if ( tolower(instructionAfterParsing[1][0]) == 'm' && tolower(instructionAfterParsing[2][0]) == 'r'){
+        add(flags,registers, memory, (instructionAfterParsing[1][1] - '0'), registers, (instructionAfterParsing[2][1] - '0'));
       }
-      else if  ( instructionAfterParsing[1][0] == 'r' && instructionAfterParsing[2][0] == 'm'){
-        add(registers,registers,(instructionAfterParsing[1][1] - '0'), memory, (instructionAfterParsing[2][1] - '0'));
+      else if  ( tolower(instructionAfterParsing[1][0]) == 'r' && tolower(instructionAfterParsing[2][0]) == 'm'){
+        add(flags,registers,registers,(instructionAfterParsing[1][1] - '0'), memory, (instructionAfterParsing[2][1] - '0'));
       }
-      else if  ( instructionAfterParsing[1][0] == 'r' && instructionAfterParsing[2][0] == 'r'){
-        add(registers,registers,(instructionAfterParsing[1][1] - '0'), registers, (instructionAfterParsing[2][1] - '0'));
+      else if  ( tolower(instructionAfterParsing[1][0]) == 'r' && tolower(instructionAfterParsing[2][0]) == 'r'){
+        add(flags,registers,registers,(instructionAfterParsing[1][1] - '0'), registers, (instructionAfterParsing[2][1] - '0'));
       }
-      else if ( instructionAfterParsing[1][0] == 'm' && instructionAfterParsing[2][0] == 'm'){
+      else if ( tolower(instructionAfterParsing[1][0]) == 'm' && tolower(instructionAfterParsing[2][0]) == 'm'){
         printf("???\n");
       }
     }
@@ -97,16 +99,16 @@ int main(){
     }
     //subtract command
     else if ((strcasecmp(instructionAfterParsing[0], toSubtract) == 0) && size == 3){
-      if ( instructionAfterParsing[1][0] == 'm' && instructionAfterParsing[2][0] == 'r'){
-        subtract(registers, memory, (instructionAfterParsing[1][1] - '0'), registers, (instructionAfterParsing[2][1] - '0'));
+      if ( tolower(instructionAfterParsing[1][0]) == 'm' && tolower(instructionAfterParsing[2][0]) == 'r'){
+        subtract(flags,registers, memory, (instructionAfterParsing[1][1] - '0'), registers, (instructionAfterParsing[2][1] - '0'));
       }
-      else if  ( instructionAfterParsing[1][0] == 'r' && instructionAfterParsing[2][0] == 'm'){
-        subtract(registers,registers,(instructionAfterParsing[1][1] - '0'), memory, (instructionAfterParsing[2][1] - '0'));
+      else if  ( tolower(instructionAfterParsing[1][0]) == 'r' && tolower(instructionAfterParsing[2][0]) == 'm'){
+        subtract(flags,registers,registers,(instructionAfterParsing[1][1] - '0'), memory, (instructionAfterParsing[2][1] - '0'));
       }
-      else if  ( instructionAfterParsing[1][0] == 'r' && instructionAfterParsing[2][0] == 'r'){
-        subtract(registers,registers,(instructionAfterParsing[1][1] - '0'), registers, (instructionAfterParsing[2][1] - '0'));
+      else if  ( tolower(instructionAfterParsing[1][0])== 'r' && tolower(instructionAfterParsing[2][0]) == 'r'){
+        subtract(flags,registers,registers,(instructionAfterParsing[1][1] - '0'), registers, (instructionAfterParsing[2][1] - '0'));
       }
-      else if ( instructionAfterParsing[1][0] == 'm' && instructionAfterParsing[2][0] == 'm'){
+      else if ( tolower(instructionAfterParsing[1][0]) == 'm' && tolower(instructionAfterParsing[2][0]) == 'm'){
         printf("???\n");
       }
     }
@@ -115,23 +117,84 @@ int main(){
     }
     //multiply command
     else if ((strcasecmp(instructionAfterParsing[0], toMultiply) == 0) && size == 3){
-      if ( instructionAfterParsing[1][0] == 'm' && instructionAfterParsing[2][0] == 'r'){
-        multiply(registers, memory, (instructionAfterParsing[1][1] - '0'), registers, (instructionAfterParsing[2][1] - '0'));
+      if ( tolower(instructionAfterParsing[1][0]) == 'm' && tolower(instructionAfterParsing[2][0]) == 'r'){
+        multiply(flags,registers, memory, (instructionAfterParsing[1][1] - '0'), registers, (instructionAfterParsing[2][1] - '0'));
       }
-      else if  ( instructionAfterParsing[1][0] == 'r' && instructionAfterParsing[2][0] == 'm'){
-        multiply(registers,registers,(instructionAfterParsing[1][1] - '0'), memory, (instructionAfterParsing[2][1] - '0'));
+      else if  ( tolower(instructionAfterParsing[1][0]) == 'r' && tolower(instructionAfterParsing[2][0]) == 'm'){
+        multiply(flags,registers,registers,(instructionAfterParsing[1][1] - '0'), memory, (instructionAfterParsing[2][1] - '0'));
       }
-      else if  ( instructionAfterParsing[1][0] == 'r' && instructionAfterParsing[2][0] == 'r'){
-        multiply(registers,registers,(instructionAfterParsing[1][1] - '0'), registers, (instructionAfterParsing[2][1] - '0'));
+      else if  ( tolower(instructionAfterParsing[1][0]) == 'r' && tolower(instructionAfterParsing[2][0]) == 'r'){
+        multiply(flags,registers,registers,(instructionAfterParsing[1][1] - '0'), registers, (instructionAfterParsing[2][1] - '0'));
       }
-      else if ( instructionAfterParsing[1][0] == 'm' && instructionAfterParsing[2][0] == 'm'){
+      else if ( tolower(instructionAfterParsing[1][0]) == 'm' && tolower(instructionAfterParsing[2][0]) == 'm'){
         printf("???\n");
       }
     }
     else if ((strcasecmp(instructionAfterParsing[0], toMultiply) == 0) && size != 3){//if the number of arguments are off
        printf("???\n");
     }
-    
+    //divide command
+    else if ((strcasecmp(instructionAfterParsing[0], toDivide) == 0) && size == 3){
+      if ( tolower(instructionAfterParsing[1][0]) == 'm' && tolower(instructionAfterParsing[2][0]) == 'r'){
+        divide(flags,registers, memory, (instructionAfterParsing[1][1] - '0'), registers, (instructionAfterParsing[2][1] - '0'));
+      }
+      else if  ( tolower(instructionAfterParsing[1][0]) == 'r' && tolower(instructionAfterParsing[2][0]) == 'm'){
+        divide(flags,registers,registers,(instructionAfterParsing[1][1] - '0'), memory, (instructionAfterParsing[2][1] - '0'));
+      }
+      else if  ( tolower(instructionAfterParsing[1][0]) == 'r' && tolower(instructionAfterParsing[2][0]) == 'r'){
+        divide(flags,registers,registers,(instructionAfterParsing[1][1] - '0'), registers, (instructionAfterParsing[2][1] - '0'));
+      }
+      else if ( tolower(instructionAfterParsing[1][0]) == 'm' && tolower(instructionAfterParsing[2][0]) == 'm'){
+        printf("???\n");
+      }
+    }
+    else if ((strcasecmp(instructionAfterParsing[0], toDivide) == 0) && size != 3){//if the number of arguments are off
+       printf("???\n");
+    }
+    //mod command
+    else if ((strcasecmp(instructionAfterParsing[0], toMod) == 0) && size == 3){
+      if ( tolower(instructionAfterParsing[1][0]) == 'm' && tolower(instructionAfterParsing[2][0]) == 'r'){
+        mod(flags,registers, memory, (instructionAfterParsing[1][1] - '0'), registers, (instructionAfterParsing[2][1] - '0'));
+      }
+      else if  ( tolower(instructionAfterParsing[1][0]) == 'r' && tolower(instructionAfterParsing[2][0]) == 'm'){
+        mod(flags,registers,registers,(instructionAfterParsing[1][1] - '0'), memory, (instructionAfterParsing[2][1] - '0'));
+      }
+      else if  ( tolower(instructionAfterParsing[1][0]) == 'r' && tolower(instructionAfterParsing[2][0]) == 'r'){
+        mod(flags,registers,registers,(instructionAfterParsing[1][1] - '0'), registers, (instructionAfterParsing[2][1] - '0'));
+      }
+      else if ( tolower(instructionAfterParsing[1][0]) == 'm' && tolower(instructionAfterParsing[2][0]) == 'm'){
+        printf("???\n");
+      }
+    }
+    else if ((strcasecmp(instructionAfterParsing[0], toMod) == 0) && size != 3){//if the number of arguments are off
+       printf("???\n");
+    }
+    //move command
+    else if ((strcasecmp(instructionAfterParsing[0], toMove) == 0) && size == 3){
+      if ( tolower(instructionAfterParsing[1][0]) == 'm' && tolower(instructionAfterParsing[2][0]) == 'r'){
+        move(memory, (instructionAfterParsing[1][1] - '0'), registers, (instructionAfterParsing[2][1] - '0'));
+      }
+      else if  ( tolower(instructionAfterParsing[1][0]) == 'r' && tolower(instructionAfterParsing[2][0]) == 'm'){
+        move(registers,(instructionAfterParsing[1][1] - '0'), memory, (instructionAfterParsing[2][1] - '0'));
+      }
+      else if  ( tolower(instructionAfterParsing[1][0]) == 'r' && tolower(instructionAfterParsing[2][0]) == 'r'){
+        move(registers,(instructionAfterParsing[1][1] - '0'), registers, (instructionAfterParsing[2][1] - '0'));
+      }
+      else if (tolower(instructionAfterParsing[1][0]) == 'm' && tolower(instructionAfterParsing[2][0]) == 'm'){
+        printf("???\n");
+      }
+    }
+    else if ((strcasecmp(instructionAfterParsing[0], toMove) == 0) && size != 3){//if the number of arguments are off
+       printf("???\n");
+    }
+    //comp command
+    else if ((strcasecmp(instructionAfterParsing[0], toCompare) == 0) && size == 3){
+        comp(flags, registers, (instructionAfterParsing[1][1] - '0'),(instructionAfterParsing[2][1] - '0'));
+    }
+    //else invalide command
+    else{
+      printf("???\n");
+    }
 
   }
     return 0;
@@ -185,7 +248,12 @@ int split(char a[], char b[100][100]){
 }
 /*this function is used to implement the read command */
 void read(int a[],int pos,int num){
+  if ( num > 127 || num < -127){
+    printf("???\n");
+  }
+  else{
   a[pos] = num;
+  }
 }
 /*this function is used to implement the write command*/
 void write(int a[], int pos){
@@ -197,29 +265,82 @@ void write(int a[], int pos){
   }
 }
 /*this function is used to implement the add command*/
-void add(int a[], int b[], int num1, int c[], int num2){
+void add(int flags[],int a[], int b[], int num1, int c[], int num2){
   if ( b[num1] + c[num2] > 127 || b[num1] + c[num2] < -128){
     a[0] = 128;
+    flags[2] = 1;
   }
   else{
   a[0] = b[num1] + c[num2];
+  flags[2] = 0;
   }
 }
 /*this function is used to implement the subtract command*/
-void subtract(int a[], int b[], int num1, int c[], int num2){
- if ( c[num2] - b[num1] < -128){
+void subtract(int flags[],int a[], int b[], int num1, int c[], int num2){
+ if ( c[num2] - b[num1] > 127 || c[num2] - b[num1] < -128){
    a[0] = 128;
+   flags[2] = 1;
  }
  else{
    a[0] = c[num2] - b[num1];
+   flags[2] = 0;
  }
 }
 /*this function is used to implement the multiply command */
-void multiply(int a[], int b[], int num1, int c[], int num2){
+void multiply(int flags[],int a[], int b[], int num1, int c[], int num2){
  if ((b[num1]*c[num2]) > 127 || (c[num2] * b[num1]) < -128){
    a[0] = 128;
+   flags[2] = 1;
  }
  else{
    a[0] = b[num1] * c[num2];
+   flags[2] = 0;
  }
 }
+/*this function is used to implement the divide command */
+void divide(int flags[],int a[], int b[], int num1, int c[], int num2){
+ if ((b[num1] / c[num2]) > 127 || (c[num2] / b[num1]) < -128){
+   a[0] = 128;
+   flags[2] = 1;
+ }
+ else{
+   a[0] = b[num1] / c[num2];
+   flags[2] = 0;
+ }
+}
+/*this function is used to implement the mod command */
+void mod(int flags[],int a[], int b[], int num1, int c[], int num2){
+ if ((b[num1] % c[num2]) > 127 || (c[num2] % b[num1]) < -128){
+   a[0] = 128;
+   flags[2] = 1;
+ }
+ else{
+   a[0] = b[num1] % c[num2];
+   flags[2] = 0;
+ }
+}
+/*this function is used to implement the move command */
+void move(int b[], int num1, int c[], int num2){
+ if ( b[num1] > 127 || b[num1] < -128){
+   c[num2] = 128;
+ }
+ else{
+ c[num2] = b[num1];
+ }
+}
+/*this function is used to implement the comp command */
+void comp(int flags[], int registers[], int pos1, int pos2){
+  if (registers[pos1] > registers[pos2]){
+    flags[0] = 0;
+    flags[1] = 1;
+  }
+  else if (registers[pos1] < registers[pos2]){
+    flags[0] = 0;
+    flags[1] = 0;
+  }
+  else if (registers[pos1] == registers[pos2]){
+    flags[0] = 1;
+    flags[1] = 0;
+  }
+}
+
