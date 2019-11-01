@@ -11,6 +11,7 @@ void read(int a[], int pos, int num);
 void write(int a[], int pos);
 void add(int a[], int b[], int num1, int c[], int num2);
 void subtract(int a[], int b[], int num1, int c[], int num2);
+void multiply(int a[], int b[], int num1, int c[], int num2);
 
 int main(){
   int flags[numFlags] = {0, 0, 0};//to store all the flags
@@ -112,6 +113,25 @@ int main(){
     else if ((strcasecmp(instructionAfterParsing[0], toSubtract) == 0) && size != 3){//if the number of arguments are off
        printf("???\n");
     }
+    //multiply command
+    else if ((strcasecmp(instructionAfterParsing[0], toMultiply) == 0) && size == 3){
+      if ( instructionAfterParsing[1][0] == 'm' && instructionAfterParsing[2][0] == 'r'){
+        multiply(registers, memory, (instructionAfterParsing[1][1] - '0'), registers, (instructionAfterParsing[2][1] - '0'));
+      }
+      else if  ( instructionAfterParsing[1][0] == 'r' && instructionAfterParsing[2][0] == 'm'){
+        multiply(registers,registers,(instructionAfterParsing[1][1] - '0'), memory, (instructionAfterParsing[2][1] - '0'));
+      }
+      else if  ( instructionAfterParsing[1][0] == 'r' && instructionAfterParsing[2][0] == 'r'){
+        multiply(registers,registers,(instructionAfterParsing[1][1] - '0'), registers, (instructionAfterParsing[2][1] - '0'));
+      }
+      else if ( instructionAfterParsing[1][0] == 'm' && instructionAfterParsing[2][0] == 'm'){
+        printf("???\n");
+      }
+    }
+    else if ((strcasecmp(instructionAfterParsing[0], toMultiply) == 0) && size != 3){//if the number of arguments are off
+       printf("???\n");
+    }
+    
 
   }
     return 0;
@@ -192,5 +212,14 @@ void subtract(int a[], int b[], int num1, int c[], int num2){
  }
  else{
    a[0] = c[num2] - b[num1];
+ }
+}
+/*this function is used to implement the multiply command */
+void multiply(int a[], int b[], int num1, int c[], int num2){
+ if ((b[num1]*c[num2]) > 127 || (c[num2] * b[num1]) < -128){
+   a[0] = 128;
+ }
+ else{
+   a[0] = b[num1] * c[num2];
  }
 }
