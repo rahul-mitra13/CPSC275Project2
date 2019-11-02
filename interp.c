@@ -37,7 +37,7 @@ int main(){
   char toMod[] = "MOD";
   char toCompare[] = "COMP";
   char toQuit[] = "QUIT";
-  int tester;
+  printf("\n");
   while (1){//infinite loop until user quits
     scanf(" %[^\n]s",instruction);
     size = split(instruction, instructionAfterParsing);
@@ -249,6 +249,7 @@ void print(int a[], int b[], int c[]){
   printf("ZF\t");
   printf("SF\t");
   printf("OF\t");
+  printf("\n");
   printf("\n");
 }
 /*this function tokenizes a string */

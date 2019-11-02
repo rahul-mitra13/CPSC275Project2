@@ -37,7 +37,7 @@ int main(){
   char toMod[] = "MOD";
   char toCompare[] = "COMP";
   char toQuit[] = "QUIT";
-  int tester;
+  printf("\n");
   while (scanf(" %[^\n]s",instruction) != EOF){//infinite loop until user quits
     size = split(instruction, instructionAfterParsing);
     //quit command
