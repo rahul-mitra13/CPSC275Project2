@@ -1,3 +1,4 @@
+.start:
 read 17,r1
 prints
 quit
