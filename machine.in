@@ -1,7 +1,7 @@
-.start: #this is a comment
-prints
+.start:  prints
 read 18,m2
 move m2,r2
+#this is a comment
 read 19, m3
 prints #this is also a comment
 

@@ -260,8 +260,10 @@ int main(){
       }
     }
     else if ((strcasecmp(instructionAfterParsing[0], toMove) == 0) && size != 3){//if the number of arguments are off
+       if ( size != 0){
        printf("hello22???\n");
        printf("\n");
+       }
     }
     //comp command
     else if ((strcasecmp(instructionAfterParsing[0], toCompare) == 0) && size == 3){
