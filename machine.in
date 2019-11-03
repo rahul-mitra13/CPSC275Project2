@@ -1,15 +1,3 @@
 .start:  #this is a comment
 prints
-read 18,m2
-move m2,r2
-#this is a comment
-prints #this is also a comment
-add m2, r2
-prints #this is also a comment
-mod m2,r2
-#this is also a comment
-prints
-read 9, r1
-sub  r1,r2 #this is a comment
-prints
 quit
