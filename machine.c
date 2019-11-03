@@ -95,7 +95,7 @@ int main(){
       printf("\n");
     }
     //else invalid command
-    else{
+    else if (size != 1){
       printf("hello6???\n");
       printf("\n");
       }
@@ -115,8 +115,10 @@ int main(){
       print(registers,memory,flags);
     }
     else if ((strcasecmp(instructionAfterParsing[0],toPrint) == 0) && size != 1){//syntax error if there is any argument to print
+      if ( size != 0){
       printf("hello8???\n");
       printf("\n");
+      }
     }
     //read command
     else if ((strcasecmp(instructionAfterParsing[0],toRead) == 0) && size == 3){//if the command is to print
@@ -260,7 +262,7 @@ int main(){
       }
     }
     else if ((strcasecmp(instructionAfterParsing[0], toMove) == 0) && size != 3){//if the number of arguments are off
-       if ( size != 0){
+       if ( size != 0){ 
        printf("hello22???\n");
        printf("\n");
        }
