@@ -1,3 +1,16 @@
-.start:  #this is a comment
+.start: #this is a comment
+      read 17,r1
+write r1
+prints
+read 18,m2
+read 19, m3
+add m2,m3
+mult M3,m2
+prints
+read 2, m3
+mult m3,r1
+prints
+#this is a comment
+move r1,r3
 prints
 quit
