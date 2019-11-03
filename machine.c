@@ -57,16 +57,20 @@ int main(){
       break;
     }
     else if ((strcasecmp(instructionAfterParsing[1],toQuit) == 0) && size != 2){//syntax error if there is any argument to quit
+      if ( size != 1){
       printf("hello2??\n");
       printf("\n");
+      }
     }
     //print command
     else if ((strcasecmp(instructionAfterParsing[1],toPrint) == 0) && size == 2){//if the command is to print
       print(registers,memory,flags);
     }
     else if ((strcasecmp(instructionAfterParsing[1],toPrint) == 0) && size != 2){//syntax error if there is any argument to print
+      if ( size != 1){
       printf("hello3???\n");
       printf("\n");
+      }
     }
     //read command
     else if ((strcasecmp(instructionAfterParsing[1],toRead) == 0) && size == 4){//if the command is to print
@@ -78,8 +82,10 @@ int main(){
       }
     }
     else if ((strcasecmp(instructionAfterParsing[0],toRead) == 0) && size != 4){//if there is an illegal number of arguments
+       if ( size != 1){
         printf("hello4???\n");
         printf("\n");
+       }
     }
     //write command
     else if ((strcasecmp(instructionAfterParsing[1],toWrite)) == 0 && size == 3){//if the input command is to write
@@ -91,8 +97,10 @@ int main(){
       }
     }
     else if ((strcasecmp(instructionAfterParsing[1],toWrite)) == 0 && size != 3){//illegal number of arguments
+     if ( size != 1){
       printf("hello5???\n");
       printf("\n");
+     }
     }
     //else invalid command
     else if (size != 1){
@@ -107,8 +115,10 @@ int main(){
       break;
     }
     else if ((strcasecmp(instructionAfterParsing[0],toQuit) == 0) && size != 1){//syntax error if there is any argument to quit
+      if ( size != 0){
       printf("hello7???\n");
       printf("\n");
+      }
     }
     //print command
     else if ((strcasecmp(instructionAfterParsing[0],toPrint) == 0) && size == 1){//if the command is to print
@@ -118,7 +128,7 @@ int main(){
       if ( size != 0){
       printf("hello8???\n");
       printf("\n");
-      }
+      } 
     }
     //read command
     else if ((strcasecmp(instructionAfterParsing[0],toRead) == 0) && size == 3){//if the command is to print
@@ -130,8 +140,10 @@ int main(){
       }
     }
     else if ((strcasecmp(instructionAfterParsing[0],toRead) == 0) && size != 3){//if there is an illegal number of arguments
+        if ( size != 0){
         printf("hello9???\n");
         printf("\n");
+        }
     }
     //write command
     else if ((strcasecmp(instructionAfterParsing[0],toWrite)) == 0 && size == 2){//if the input command is to write
@@ -143,8 +155,10 @@ int main(){
       }
     }
     else if ((strcasecmp(instructionAfterParsing[0],toWrite)) == 0 && size != 2){//illegal number of arguments
+      if ( size != 0){
       printf("hello10???\n");
       printf("\n");
+      }
     }
     //add command
     else if ((strcasecmp(instructionAfterParsing[0], toAdd) == 0) && size == 3){
@@ -162,8 +176,10 @@ int main(){
       }
     }
     else if ((strcasecmp(instructionAfterParsing[0], toAdd) == 0) && size != 3){//if the number of arguments are off
+       if ( size != 0){
        printf("hello12???\n");
        printf("\n");
+       }
     }
     //subtract command
     else if ((strcasecmp(instructionAfterParsing[0], toSubtract) == 0) && size == 3){
@@ -182,8 +198,10 @@ int main(){
       }
     }
     else if ((strcasecmp(instructionAfterParsing[0], toSubtract) == 0) && size != 3){//if the number of arguments are off
+       if ( size != 0){
        printf("hello14???\n");
        printf("\n");
+       }
     }
     //multiply command
     else if ((strcasecmp(instructionAfterParsing[0], toMultiply) == 0) && size == 3){
@@ -202,8 +220,10 @@ int main(){
       }
     }
     else if ((strcasecmp(instructionAfterParsing[0], toMultiply) == 0) && size != 3){//if the number of arguments are off
+      if ( size != 0){
        printf("hello16???\n");
        printf("\n");
+      }
     }
     //divide command
     else if ((strcasecmp(instructionAfterParsing[0], toDivide) == 0) && size == 3){
@@ -222,8 +242,10 @@ int main(){
       }
     }
     else if ((strcasecmp(instructionAfterParsing[0], toDivide) == 0) && size != 3){//if the number of arguments are off
+       if ( size != 0){
        printf("hello18???\n");
        printf("\n");
+       }
     }
     //mod command
     else if ((strcasecmp(instructionAfterParsing[0], toMod) == 0) && size == 3){
@@ -242,8 +264,10 @@ int main(){
       }
     }
     else if ((strcasecmp(instructionAfterParsing[0], toMod) == 0) && size != 3){//if the number of arguments are off
+       if ( size != 0){
        printf("hello20???\n");
        printf("\n");
+       }
     }
     //move command
     else if ((strcasecmp(instructionAfterParsing[0], toMove) == 0) && size == 3){
@@ -272,9 +296,11 @@ int main(){
         comp(flags, registers, (instructionAfterParsing[1][1] - '0'),(instructionAfterParsing[2][1] - '0'));
     }
     //else invalid command
-    else {  
+    else {
+            if ( size != 0){  
             printf("hello23???\n");
             printf("\n");
+            }
         }
     }//if not on the first line
   }//end of while loop
