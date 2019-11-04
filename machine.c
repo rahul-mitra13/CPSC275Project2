@@ -17,6 +17,7 @@ void divide(int flags[],int a[], int b[], int num1, int c[], int num2);
 void mod(int flags[],int a[], int b[], int num1, int c[], int num2);
 void move(int b[], int num1, int c[], int num2);
 void comp(int flags[], int registers[], int pos1, int pos2);
+int executeInstruction(char instruction[],int i, int memory[], int registers[], int flags[]);
 
 int main(){
   int flags[numFlags] = {0, 0, 0};//to store all the flags
@@ -57,8 +58,9 @@ int main(){
       }
       strcpy(wholeProgram[k++],newstr);
     }
-  for ( i = 0; i < k; i++){
-      printf("%s\n",wholeProgram[i]);
+  i = 0;
+  while ( i < k){
+    i = executeInstruction(wholeProgram[i], i, memory,registers,flags);
   }
   printf("This is the size = %d\n",k);
 }
@@ -218,5 +220,12 @@ void comp(int flags[], int registers[], int pos1, int pos2){
     flags[0] = 1;
     flags[1] = 0;
   }
+}
+/*this function takes an instruction and executes it */
+int executeInstruction(char instruction[],int i, int memory[], int registers[], int flags[]){
+  char parsedIntstruction[100][100];
+  printf("%s\n",instruction);
+  i++;
+  return i;
 }
 
