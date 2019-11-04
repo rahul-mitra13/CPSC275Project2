@@ -30,18 +30,6 @@ int main(){
   int i;
   int k;
   int numlines;
-  char toRead[] = "READ";
-  char toWrite[] = "WRITE";
-  char toPrint[] = "PRINTS";
-  char toMove[] = "MOVE";
-  char toAdd[] = "ADD";
-  char toSubtract[] = "SUB";
-  char toMultiply[] = "MULT";
-  char toDivide[] = "DIV";
-  char toMod[] = "MOD";
-  char toCompare[] = "COMP";
-  char toQuit[] = "QUIT";
-  char toStart[] = ".start:";
   char newstr[100];
   k = 0;
   printf("\n");
@@ -49,20 +37,15 @@ int main(){
   size = split(instruction, instructionAfterParsing);
   newstr[0] = '\0';
   for ( i = 0; i < size; i++){
-          if ( i == size - 1){
           strcat(newstr,strcat(instructionAfterParsing[i]," "));
-          }
-          else{
-              strcat(newstr,strcat(instructionAfterParsing[i]," "));
-          }
-      }
+        }
       strcpy(wholeProgram[k++],newstr);
     }
+  printf("This is the size = %d\n",k);
   i = 0;
   while ( i < k){
     i = executeInstruction(wholeProgram[i], i, memory,registers,flags);
   }
-  printf("This is the size = %d\n",k);
 }
 
 /*function that is called when input is prints*/
@@ -223,8 +206,29 @@ void comp(int flags[], int registers[], int pos1, int pos2){
 }
 /*this function takes an instruction and executes it */
 int executeInstruction(char instruction[],int i, int memory[], int registers[], int flags[]){
-  char parsedIntstruction[100][100];
   printf("%s\n",instruction);
+  char toRead[] = "READ";
+  char toWrite[] = "WRITE";
+  char toPrint[] = "PRINTS";
+  char toMove[] = "MOVE";
+  char toAdd[] = "ADD";
+  char toSubtract[] = "SUB";
+  char toMultiply[] = "MULT";
+  char toDivide[] = "DIV";
+  char toMod[] = "MOD";
+  char toCompare[] = "COMP";
+  char toQuit[] = "QUIT";
+  char toStart[] = ".start:";
+  char parsedIntstruction[100][100];
+  char* token = strtok(instruction," ");
+  int j;
+  int k;
+  k = 0;
+  while (token){
+    strcpy(parsedIntstruction[k],token);
+    token = strtok(NULL," ");
+    k++;
+  }
   i++;
   return i;
 }
