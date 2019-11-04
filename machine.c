@@ -29,6 +29,7 @@ int main(){
   int size;
   int i;
   int k;
+  int j;
   int numlines;
   char newstr[100];
   k = 0;
@@ -44,8 +45,10 @@ int main(){
   printf("This is the size = %d\n",k);
   i = 0;
   while ( i < k){
-    i = executeInstruction(wholeProgram[i], i, memory,registers,flags);
+    j = executeInstruction(wholeProgram[i], i, memory,registers,flags);
+    i = j;
   }
+  print(registers,memory,flags);
 }
 
 /*function that is called when input is prints*/
@@ -206,7 +209,6 @@ void comp(int flags[], int registers[], int pos1, int pos2){
 }
 /*this function takes an instruction and executes it */
 int executeInstruction(char instruction[],int i, int memory[], int registers[], int flags[]){
-  printf("%s\n",instruction);
   char toRead[] = "READ";
   char toWrite[] = "WRITE";
   char toPrint[] = "PRINTS";
@@ -228,6 +230,57 @@ int executeInstruction(char instruction[],int i, int memory[], int registers[], 
     strcpy(parsedIntstruction[k],token);
     token = strtok(NULL," ");
     k++;
+  }
+    if ( i == 0){//handle the case for the first line
+       //if the first label is not quit throw an error
+       if ( strcasecmp(parsedIntstruction[0], toStart) != 0){
+         printf("1???\n");
+       }
+       //quit command
+       else if (strcasecmp(parsedIntstruction[1], toQuit) == 0 && k == 2){
+         exit(0);
+       }
+       else if ( strcasecmp(parsedIntstruction[1],toQuit) == 0 && k !=2 ){//illegal number of arguments to quit
+         printf("2???\n");
+       }
+       //print command
+       else if (strcasecmp(parsedIntstruction[1], toPrint) == 0 && k == 2){
+         print(registers, memory, flags);
+       }
+       else if ( strcasecmp(parsedIntstruction[1],toPrint) == 0 && k !=2 ){//illegal number of arguments to quit
+         printf("3???\n");
+       }
+       //read command
+       else if ((strcasecmp(parsedIntstruction[1],toRead) == 0) && k == 4){//if the command is to print
+      if ( tolower(parsedIntstruction[3][0]) == 'm'){
+        read(memory,(parsedIntstruction[3][1]-'0'),atoi(parsedIntstruction[2]));//goes array,position,num
+      }
+      else if ( tolower(parsedIntstruction[3][0]) == 'r'){
+        read(registers,(parsedIntstruction[3][1]-'0'),atoi(parsedIntstruction[2]));//goes array,position,num
+        } 
+      }
+      else if ((strcasecmp(parsedIntstruction[1],toRead) == 0) && k != 4){//if there is an illegal number of arguments
+        printf("4???\n");
+        printf("\n");
+      }
+      //write command
+      else if ((strcasecmp(parsedIntstruction[1],toWrite)) == 0 && k == 3){//if the input command is to write
+        if (tolower(parsedIntstruction[2][0]) == 'm'){
+          write(memory,(parsedIntstruction[2][1] - '0'));
+        }
+        else if (tolower(parsedIntstruction[2][0]) == 'r'){
+          write(registers, (parsedIntstruction[2][1] - '0'));
+        }
+      }
+        else if ((strcasecmp(parsedIntstruction[1],toWrite)) == 0 && k != 3){//illegal number of arguments
+          printf("5???\n");
+          printf("\n");
+      }
+      else if ( k != 0){
+        printf("6???\n");
+        printf("\n");
+      }//end of first line parsing
+
   }
   i++;
   return i;

@@ -1,6 +1,4 @@
-.start: print #this is a comment
-#this is also a comment
-move 17,r3
-add 23,m5
-quit
+.start: read 17,m1 #this is a comment
+#this is a comment
+
 
