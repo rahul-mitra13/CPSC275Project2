@@ -22,7 +22,6 @@ mult m1,r2
 prints
 read 4, r1
 #this is a comment
-read 8, r2
 div r2,r1
 prints
 mod r2,r1
