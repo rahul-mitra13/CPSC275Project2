@@ -145,6 +145,9 @@ void subtract(int flags[],int a[], int b[], int num1, int c[], int num2){
    a[0] = 128;
    flags[2] = 1;
  }
+ else if ( c[num2] - b[num1] < 0){
+   flags[1] = 1;
+ }
  else{
    a[0] = c[num2] - b[num1];
    flags[2] = 0;
