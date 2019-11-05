@@ -219,6 +219,13 @@ int executeInstruction(char instruction[],int i, int memory[], int registers[], 
   char toCompare[] = "COMP";
   char toQuit[] = "QUIT";
   char toStart[] = ".start:";
+  char unconJump[] = "JMP";
+  char jumpEq[] = "JE";
+  char jumpNEq[] = "JNE";
+  char jumpG[] = "JG";
+  char jumpGEq[] = "JGE";
+  char jumpL[] = "JL";
+  char jumpLE[] = "JLE";
   char parsedIntstruction[100][100];
   char* token = strtok(instruction," ");
   int j;

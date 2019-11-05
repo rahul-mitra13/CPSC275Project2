@@ -1,4 +1,40 @@
-.start: read 17,m1 #this is a comment
+.start: read 17,m1
+#this is a comment
+prints
+read 18, m2
+#this is a comment
+prints 
+#this is a comment
+write m2
+read 1, r1
+#this is a comment
+write r1
+#this is a comment
+#this is a comment
+add r1,m2
+prints
+sub m2,r1 #this is also a comment
+prints
+#this is a comment
+read 20,m1
+read 20,r2
+mult m1,r2
+prints
+read 4, r1
+#this is a comment
+read 8, r2
+div r2,r1
+prints
+mod r2,r1
+prints
+move R0, m4
+read 125, r3
+comp r3,r1
+prints
+quit
+#this is a comment
+
+
 #this is a comment
 
 
