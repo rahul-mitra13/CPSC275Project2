@@ -17,7 +17,7 @@ void divide(int flags[],int a[], int b[], int num1, int c[], int num2);
 void mod(int flags[],int a[], int b[], int num1, int c[], int num2);
 void move(int b[], int num1, int c[], int num2);
 void comp(int flags[], int registers[], int pos1, int pos2);
-int executeInstruction(char instruction[],int i, int memory[], int registers[], int flags[]);
+int executeInstruction(char instruction[],int i, int memory[], int registers[], int flags[], char wholeProgram[100][100]);
 
 int main(){
   int flags[numFlags] = {0, 0, 0};//to store all the flags
@@ -42,13 +42,11 @@ int main(){
         }
       strcpy(wholeProgram[k++],newstr);
     }
-  printf("This is the size = %d\n",k);
   i = 0;
   while ( i < k){
-    j = executeInstruction(wholeProgram[i], i, memory,registers,flags);
+    j = executeInstruction(wholeProgram[i], i, memory,registers,flags, wholeProgram);
     i = j;
   }
-  print(registers,memory,flags);
 }
 
 /*function that is called when input is prints*/
@@ -208,7 +206,7 @@ void comp(int flags[], int registers[], int pos1, int pos2){
   }
 }
 /*this function takes an instruction and executes it */
-int executeInstruction(char instruction[],int i, int memory[], int registers[], int flags[]){
+int executeInstruction(char instruction[],int i, int memory[], int registers[], int flags[], char wholeProgram[100][100]){
   char toRead[] = "READ";
   char toWrite[] = "WRITE";
   char toPrint[] = "PRINTS";
@@ -235,20 +233,23 @@ int executeInstruction(char instruction[],int i, int memory[], int registers[], 
        //if the first label is not quit throw an error
        if ( strcasecmp(parsedIntstruction[0], toStart) != 0){
          printf("1???\n");
+         exit(0);
        }
        //quit command
        else if (strcasecmp(parsedIntstruction[1], toQuit) == 0 && k == 2){
          exit(0);
        }
-       else if ( strcasecmp(parsedIntstruction[1],toQuit) == 0 && k !=2 ){//illegal number of arguments to quit
+       else if ( strcasecmp(parsedIntstruction[1],toQuit) == 0 && k !=2 && k != 0){//illegal number of arguments to quit
          printf("2???\n");
+         exit(0);
        }
        //print command
        else if (strcasecmp(parsedIntstruction[1], toPrint) == 0 && k == 2){
          print(registers, memory, flags);
        }
-       else if ( strcasecmp(parsedIntstruction[1],toPrint) == 0 && k !=2 ){//illegal number of arguments to quit
+       else if ( strcasecmp(parsedIntstruction[1],toPrint) == 0 && k !=2 && k != 0){//illegal number of arguments to quit
          printf("3???\n");
+         exit(0);
        }
        //read command
        else if ((strcasecmp(parsedIntstruction[1],toRead) == 0) && k == 4){//if the command is to print
@@ -259,9 +260,9 @@ int executeInstruction(char instruction[],int i, int memory[], int registers[], 
         read(registers,(parsedIntstruction[3][1]-'0'),atoi(parsedIntstruction[2]));//goes array,position,num
         } 
       }
-      else if ((strcasecmp(parsedIntstruction[1],toRead) == 0) && k != 4){//if there is an illegal number of arguments
+      else if ((strcasecmp(parsedIntstruction[1],toRead) == 0) && k != 4 && k != 0){//if there is an illegal number of arguments
         printf("4???\n");
-        printf("\n");
+        exit(0);
       }
       //write command
       else if ((strcasecmp(parsedIntstruction[1],toWrite)) == 0 && k == 3){//if the input command is to write
@@ -272,14 +273,199 @@ int executeInstruction(char instruction[],int i, int memory[], int registers[], 
           write(registers, (parsedIntstruction[2][1] - '0'));
         }
       }
-        else if ((strcasecmp(parsedIntstruction[1],toWrite)) == 0 && k != 3){//illegal number of arguments
+        else if ((strcasecmp(parsedIntstruction[1],toWrite)) == 0 && k != 3 && k != 0){//illegal number of arguments
           printf("5???\n");
-          printf("\n");
+          exit(0);
       }
       else if ( k != 0){
         printf("6???\n");
-        printf("\n");
+        exit(0);
+        }
       }//end of first line parsing
+      else{
+        //quit command
+        if ((strcasecmp(parsedIntstruction[0],toQuit) == 0) && k == 1){//if the command is to quit
+          exit(0);
+        }
+      else if ((strcasecmp(parsedIntstruction[0],toQuit) == 0) && k != 1 && k != 0){//syntax error if there is any argument to quit
+        printf("7???\n");
+        exit(0);
+      }
+      //print command
+      else if ((strcasecmp(parsedIntstruction[0],toPrint) == 0) && k == 1){//if the command is to print
+        print(registers,memory,flags);
+      }
+      else if ((strcasecmp(parsedIntstruction[0],toPrint) == 0) && k != 1 && k != 0){//syntax error if there is any argument to print
+        printf("8???\n");
+        exit(0);
+      }
+      //read command
+      else if ((strcasecmp(parsedIntstruction[0],toRead) == 0) && k == 3){//if the command is to print
+      if ( tolower(parsedIntstruction[2][0]) == 'm'){
+        read(memory,(parsedIntstruction[2][1]-'0'),atoi(parsedIntstruction[1]));//goes array,position,num
+      }
+      else if ( tolower(parsedIntstruction[2][0]) == 'r'){
+        read(registers,(parsedIntstruction[2][1]-'0'),atoi(parsedIntstruction[1]));//goes array,position,num
+      }
+    }
+    else if ((strcasecmp(parsedIntstruction[0],toRead) == 0) && k != 3 && k != 0){//if there is an illegal number of arguments
+        printf("9???\n");
+        exit(0);
+    }
+    //write command
+    else if ((strcasecmp(parsedIntstruction[0],toWrite)) == 0 && k == 2){//if the input command is to write
+      if (tolower(parsedIntstruction[1][0]) == 'm'){
+        write(memory,(parsedIntstruction[1][1] - '0'));
+      }
+      else if (tolower(parsedIntstruction[1][0]) == 'r'){
+        write(registers, (parsedIntstruction[1][1] - '0'));
+      }
+    }
+    else if ((strcasecmp(parsedIntstruction[0],toWrite)) == 0 && k != 2 && k != 0){//illegal number of arguments
+      printf("10???\n");
+      exit(0);
+    }
+    //add command
+    else if ((strcasecmp(parsedIntstruction[0], toAdd) == 0) && k == 3){
+      if ( tolower(parsedIntstruction[1][0]) == 'm' && tolower(parsedIntstruction[2][0]) == 'r'){
+        add(flags,registers, memory, (parsedIntstruction[1][1] - '0'), registers, (parsedIntstruction[2][1] - '0'));
+      }
+      else if  ( tolower(parsedIntstruction[1][0]) == 'r' && tolower(parsedIntstruction[2][0]) == 'm'){
+        add(flags,registers,registers,(parsedIntstruction[1][1] - '0'), memory, (parsedIntstruction[2][1] - '0'));
+      }
+      else if  ( tolower(parsedIntstruction[1][0]) == 'r' && tolower(parsedIntstruction[2][0]) == 'r'){
+        add(flags,registers,registers,(parsedIntstruction[1][1] - '0'), registers, (parsedIntstruction[2][1] - '0'));
+      }
+      else if ( tolower(parsedIntstruction[1][0]) == 'm' && tolower(parsedIntstruction[2][0]) == 'm'){
+        printf("11???\n");
+        exit(0);
+      }
+    }
+    else if ((strcasecmp(parsedIntstruction[0], toAdd) == 0) && k != 3 && k != 0){//if the number of arguments are off
+       printf("12???\n");
+       exit(0);
+    }
+    //subtract command
+    else if ((strcasecmp(parsedIntstruction[0], toSubtract) == 0) && k == 3){
+      if ( tolower(parsedIntstruction[1][0]) == 'm' && tolower(parsedIntstruction[2][0]) == 'r'){
+        subtract(flags,registers, memory, (parsedIntstruction[1][1] - '0'), registers, (parsedIntstruction[2][1] - '0'));
+      }
+      else if  ( tolower(parsedIntstruction[1][0]) == 'r' && tolower(parsedIntstruction[2][0]) == 'm'){
+        subtract(flags,registers,registers,(parsedIntstruction[1][1] - '0'), memory, (parsedIntstruction[2][1] - '0'));
+      }
+      else if  ( tolower(parsedIntstruction[1][0])== 'r' && tolower(parsedIntstruction[2][0]) == 'r'){
+        subtract(flags,registers,registers,(parsedIntstruction[1][1] - '0'), registers, (parsedIntstruction[2][1] - '0'));
+      }
+      else if ( tolower(parsedIntstruction[1][0]) == 'm' && tolower(parsedIntstruction[2][0]) == 'm'){
+        printf("13???\n");
+        exit(0);
+      }
+    }
+    else if ((strcasecmp(parsedIntstruction[0], toSubtract) == 0) && k != 3 && k != 0){//if the number of arguments are off
+       printf("14???\n");
+       exit(0);
+    }
+    //multiply command
+    else if ((strcasecmp(parsedIntstruction[0], toMultiply) == 0) && k == 3){
+      if ( tolower(parsedIntstruction[1][0]) == 'm' && tolower(parsedIntstruction[2][0]) == 'r'){
+        multiply(flags,registers, memory, (parsedIntstruction[1][1] - '0'), registers, (parsedIntstruction[2][1] - '0'));
+      }
+      else if  ( tolower(parsedIntstruction[1][0]) == 'r' && tolower(parsedIntstruction[2][0]) == 'm'){
+        multiply(flags,registers,registers,(parsedIntstruction[1][1] - '0'), memory, (parsedIntstruction[2][1] - '0'));
+      }
+      else if  ( tolower(parsedIntstruction[1][0]) == 'r' && tolower(parsedIntstruction[2][0]) == 'r'){
+        multiply(flags,registers,registers,(parsedIntstruction[1][1] - '0'), registers, (parsedIntstruction[2][1] - '0'));
+      }
+      else if ( tolower(parsedIntstruction[1][0]) == 'm' && tolower(parsedIntstruction[2][0]) == 'm'){
+        printf("15???\n");
+        exit(0);
+        }
+      }
+      else if ((strcasecmp(parsedIntstruction[0], toMultiply) == 0) && k != 3 && k != 0){//if the number of arguments are off
+       printf("17???\n");
+       exit(0);
+      }
+    //divide command
+    else if ((strcasecmp(parsedIntstruction[0], toDivide) == 0) && k == 3){
+      if ( tolower(parsedIntstruction[1][0]) == 'm' && tolower(parsedIntstruction[2][0]) == 'r'){
+        divide(flags,registers, memory, (parsedIntstruction[1][1] - '0'), registers, (parsedIntstruction[2][1] - '0'));
+      }
+      else if  ( tolower(parsedIntstruction[1][0]) == 'r' && tolower(parsedIntstruction[2][0]) == 'm'){
+        divide(flags,registers,registers,(parsedIntstruction[1][1] - '0'), memory, (parsedIntstruction[2][1] - '0'));
+      }
+      else if  ( tolower(parsedIntstruction[1][0]) == 'r' && tolower(parsedIntstruction[2][0]) == 'r'){
+        divide(flags,registers,registers,(parsedIntstruction[1][1] - '0'), registers, (parsedIntstruction[2][1] - '0'));
+      }
+      else if ( tolower(parsedIntstruction[1][0]) == 'm' && tolower(parsedIntstruction[2][0]) == 'm'){
+        printf("18???\n");
+        exit(0);
+      }
+    }
+    else if ((strcasecmp(parsedIntstruction[0], toDivide) == 0) && k != 3 && k != 0){//if the number of arguments are off
+       printf("19???\n");
+       exit(0);
+    }
+    //mod command
+    else if ((strcasecmp(parsedIntstruction[0], toMod) == 0) && k == 3){
+      if ( tolower(parsedIntstruction[1][0]) == 'm' && tolower(parsedIntstruction[2][0]) == 'r'){
+        mod(flags,registers, memory, (parsedIntstruction[1][1] - '0'), registers, (parsedIntstruction[2][1] - '0'));
+      }
+      else if  ( tolower(parsedIntstruction[1][0]) == 'r' && tolower(parsedIntstruction[2][0]) == 'm'){
+        mod(flags,registers,registers,(parsedIntstruction[1][1] - '0'), memory, (parsedIntstruction[2][1] - '0'));
+      }
+      else if  ( tolower(parsedIntstruction[1][0]) == 'r' && tolower(parsedIntstruction[2][0]) == 'r'){
+        mod(flags,registers,registers,(parsedIntstruction[1][1] - '0'), registers, (parsedIntstruction[2][1] - '0'));
+      }
+      else if ( tolower(parsedIntstruction[1][0]) == 'm' && tolower(parsedIntstruction[2][0]) == 'm'){
+        printf("20???\n");
+        exit(0);
+      }
+    }
+    else if ((strcasecmp(parsedIntstruction[0], toMod) == 0) && k != 3 && k != 0){//if the number of arguments are off
+       printf("21???\n");
+       exit(0);
+    }
+    //move command
+    else if ((strcasecmp(parsedIntstruction[0], toMove) == 0) && k == 3){
+      if ( tolower(parsedIntstruction[1][0]) == 'm' && tolower(parsedIntstruction[2][0]) == 'r'){
+        move(memory, (parsedIntstruction[1][1] - '0'), registers, (parsedIntstruction[2][1] - '0'));
+      }
+      else if  ( tolower(parsedIntstruction[1][0]) == 'r' && tolower(parsedIntstruction[2][0]) == 'm'){
+        move(registers,(parsedIntstruction[1][1] - '0'), memory, (parsedIntstruction[2][1] - '0'));
+      }
+      else if  ( tolower(parsedIntstruction[1][0]) == 'r' && tolower(parsedIntstruction[2][0]) == 'r'){
+        move(registers,(parsedIntstruction[1][1] - '0'), registers, (parsedIntstruction[2][1] - '0'));
+      }
+      else if (tolower(parsedIntstruction[1][0]) == 'm' && tolower(parsedIntstruction[2][0]) == 'm'){
+        printf("22???\n");
+        exit(0);
+      }
+    }
+    else if ((strcasecmp(parsedIntstruction[0], toMove) == 0) && k != 3 && k != 0){//if the number of arguments are off
+       printf("23???\n");
+       exit(0);
+    }
+    //comp command
+    else if ((strcasecmp(parsedIntstruction[0], toCompare) == 0) && k == 3){
+        if ( parsedIntstruction[1][0] == 'm' || parsedIntstruction[2][0] == 'm'){
+          printf("24???\n");
+          exit(0);
+        }
+        else{
+        comp(flags, registers, (parsedIntstruction[1][1] - '0'),(parsedIntstruction[2][1] - '0'));
+        }
+    }
+    else if ((strcasecmp(parsedIntstruction[0], toCompare) == 0) && k != 3 && k != 0){//illegal number of arguments to comp
+      printf("25???\n");
+      exit(0);
+    }
+    //else invalid command
+    else{
+      if ( k != 0){
+      printf("26???\n");
+      printf("\n");
+      }
+    }
 
   }
   i++;
