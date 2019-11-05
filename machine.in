@@ -24,10 +24,10 @@ read 4, r1
 #this is a comment
 div r2,r1
 mod r2,r1
-prints
 move R0, m4
 read 125, r3
 comp r3,r1
+comp m2,m3
 prints
 quit
 #this is a comment

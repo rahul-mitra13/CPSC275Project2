@@ -17,7 +17,7 @@ void divide(int flags[],int a[], int b[], int num1, int c[], int num2);
 void mod(int flags[],int a[], int b[], int num1, int c[], int num2);
 void move(int b[], int num1, int c[], int num2);
 void comp(int flags[], int registers[], int pos1, int pos2);
-int executeInstruction(char instruction[],int i, int memory[], int registers[], int flags[], char wholeProgram[100][100]);
+int executeInstruction(char instruction[],int i, int memory[], int registers[], int flags[], char wholeProgram[100][100], int k);
 int findInstruction(char instruction[],char wholeProgram[100][100]);
 int isLabel(char string[]);
 
@@ -46,7 +46,7 @@ int main(){
     }
   i = 0;
   while ( i < k){
-    j = executeInstruction(wholeProgram[i], i, memory,registers,flags, wholeProgram);
+    j = executeInstruction(wholeProgram[i], i, memory,registers,flags, wholeProgram, k);
     i = j;
   }
 }
@@ -208,7 +208,8 @@ void comp(int flags[], int registers[], int pos1, int pos2){
   }
 }
 /*this function takes an instruction and executes it */
-int executeInstruction(char instruction[],int i, int memory[], int registers[], int flags[], char wholeProgram[100][100]){
+int executeInstruction(char instruction[],int i, int memory[], int registers[], int flags[], char wholeProgram[100][100], int k){
+  char copy[100][100];
   char toRead[] = "READ";
   char toWrite[] = "WRITE";
   char toPrint[] = "PRINTS";
@@ -231,7 +232,6 @@ int executeInstruction(char instruction[],int i, int memory[], int registers[], 
   char parsedIntstruction[100][100];
   char* token = strtok(instruction," ");
   int j;
-  int k;
   k = 0;
   while (token){
     strcpy(parsedIntstruction[k],token);
@@ -473,6 +473,7 @@ int executeInstruction(char instruction[],int i, int memory[], int registers[], 
    else if ((strcasecmp(parsedIntstruction[0], unconJump) == 0) && k == 2){
       strcat(parsedIntstruction[1],":");
       printf("This is what I'm searching for = %s\n", parsedIntstruction[1]);
+      int j;
       i = findInstruction(parsedIntstruction[1],wholeProgram);
       return i;
     }*/
@@ -493,21 +494,12 @@ int executeInstruction(char instruction[],int i, int memory[], int registers[], 
   int i;
   int j;
   int k;
-  k = 0;
-  i = 0;
-  j = 0;
-  for ( i = 0; i < 100; i++){
-    for ( j = 0; j < 100; j++){
-      if ( wholeProgram[i][j] == '\n'){
-        k++;
-      }
-      if ( strcasecmp(wholeProgram[i],instruction) == 0){
-        return k;
-      }
+  for ( i = 0 ; i < 100; i++){
+    if ( strcasecmp(wholeProgram[i],instruction) == 0){
+      break;
     }
   }
-
-  return k;
+   return i;
 }
 /*this function checks if a string is a label or not*/
 int isLabel(char string[]){
