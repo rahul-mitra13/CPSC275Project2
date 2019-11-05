@@ -204,9 +204,17 @@ int main(){
     }
     //comp command
     else if ((strcasecmp(instructionAfterParsing[0], toCompare) == 0) && size == 3){
+        if ( instructionAfterParsing[1][0] == 'm' || instructionAfterParsing[2][0] == 'm'){
+          printf("???\n");
+        }
+        else{
         comp(flags, registers, (instructionAfterParsing[1][1] - '0'),(instructionAfterParsing[2][1] - '0'));
+        }
     }
-    //else invalide command
+    else if ((strcasecmp(instructionAfterParsing[0], toCompare) == 0) && size != 3){//illegal number of arguments to comp
+      printf("???\n");
+    }
+    //else invalid command
     else{
       printf("???\n");
       printf("\n");
