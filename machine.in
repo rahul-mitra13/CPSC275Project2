@@ -3,7 +3,7 @@
 prints
 read 18, m2
 #this is a comment
-prints 
+prints
 #this is a comment
 write m2
 read 1, r1
@@ -11,7 +11,7 @@ read 1, r1
 write r1
 #this is a comment
 #this is a comment
-add r1,m2
+add r1,m2 #this is a comment
 prints
 sub m2,r1 #this is also a comment
 prints
@@ -23,7 +23,6 @@ prints
 read 4, r1
 #this is a comment
 div r2,r1
-prints
 mod r2,r1
 prints
 move R0, m4
@@ -35,5 +34,3 @@ quit
 
 
 #this is a comment
-
-

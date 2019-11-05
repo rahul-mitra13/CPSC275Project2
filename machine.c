@@ -267,7 +267,7 @@ int executeInstruction(char instruction[],int i, int memory[], int registers[], 
       }
       else if ( tolower(parsedIntstruction[3][0]) == 'r'){
         read(registers,(parsedIntstruction[3][1]-'0'),atoi(parsedIntstruction[2]));//goes array,position,num
-        } 
+        }
       }
       else if ((strcasecmp(parsedIntstruction[1],toRead) == 0) && k != 4 && k != 0){//if there is an illegal number of arguments
         printf("4???\n");
@@ -321,7 +321,7 @@ int executeInstruction(char instruction[],int i, int memory[], int registers[], 
         printf("9???\n");
         exit(0);
     }
-    //write command
+    //write commands
     else if ((strcasecmp(parsedIntstruction[0],toWrite)) == 0 && k == 2){//if the input command is to write
       if (tolower(parsedIntstruction[1][0]) == 'm'){
         write(memory,(parsedIntstruction[1][1] - '0'));
@@ -469,7 +469,8 @@ int executeInstruction(char instruction[],int i, int memory[], int registers[], 
       exit(0);
     }
     //unconditional jump
-   /* else if ((strcasecmp(parsedIntstruction[0], unconJump) == 0) && k == 2){
+    /*
+   else if ((strcasecmp(parsedIntstruction[0], unconJump) == 0) && k == 2){
       strcat(parsedIntstruction[1],":");
       printf("This is what I'm searching for = %s\n", parsedIntstruction[1]);
       i = findInstruction(parsedIntstruction[1],wholeProgram);
@@ -487,17 +488,28 @@ int executeInstruction(char instruction[],int i, int memory[], int registers[], 
   i++;
   return i;
 }
-
-/* int findInstruction(char instruction[], char wholeProgram[100][100]){
+/*this function finds the line number of an instruction*/
+ int findInstruction(char instruction[], char wholeProgram[100][100]){
   int i;
+  int j;
+  int k;
+  k = 0;
   i = 0;
-  while ( strcasecmp(wholeProgram[i], instruction) != 0){
-    printf("I'm in here");
-    i++;
+  j = 0;
+  for ( i = 0; i < 100; i++){
+    for ( j = 0; j < 100; j++){
+      if ( wholeProgram[i][j] == '\n'){
+        k++;
+      }
+      if ( strcasecmp(wholeProgram[i],instruction) == 0){
+        return k;
+      }
+    }
   }
-  return i;
+
+  return k;
 }
-*/
+/*this function checks if a string is a label or not*/
 int isLabel(char string[]){
   if ( string[0] == '.' && string[strlen(string) - 1] == ':'){
     return 1;
@@ -506,4 +518,3 @@ int isLabel(char string[]){
     return 0;
   }
 }
-
