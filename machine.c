@@ -18,6 +18,7 @@ void mod(int flags[],int a[], int b[], int num1, int c[], int num2);
 void move(int b[], int num1, int c[], int num2);
 void comp(int flags[], int registers[], int pos1, int pos2);
 int executeInstruction(char instruction[],int i, int memory[], int registers[], int flags[], char wholeProgram[100][100]);
+int findInstruction(char instruction[],char wholeProgram[100][100]);
 
 int main(){
   int flags[numFlags] = {0, 0, 0};//to store all the flags
@@ -466,6 +467,11 @@ int executeInstruction(char instruction[],int i, int memory[], int registers[], 
       printf("25???\n");
       exit(0);
     }
+    /* 
+    else if ((strcasecmp(parsedIntstruction[0], unconJump) == 0) && k == 2){
+      i = findInstruction(unconJump,wholeProgram);
+      return i;
+    }*/
     //else invalid command
     else{
       if ( k != 0){
@@ -478,4 +484,13 @@ int executeInstruction(char instruction[],int i, int memory[], int registers[], 
   i++;
   return i;
 }
+/*
+int findInstruction(char instruction[], char wholeProgram[100][100]){
+  int i;
+  while ( strcasecmp(wholeProgram[i], instruction) != 0){
+    i++;
+  }
+  return i;
+}
+*/
 
