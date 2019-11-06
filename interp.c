@@ -285,40 +285,53 @@ void write(int a[], int pos){
 void add(int flags[],int a[], int b[], int num1, int c[], int num2){
   if ( b[num1] + c[num2] > 127 || b[num1] + c[num2] < -128){
     a[0] = 128;
+    flags[0] = 0;
+    flags[1] = 0;
     flags[2] = 1;
   }
   else if ( b[num1] + c[num2] < 0){
     a[0] = b[num1] + c[num2];
+    flags[0] = 0;
     flags[1] = 1;
+    flags[2] = 0;
   }
   else if ( b[num1] + c[num2] == 0){
     a[0] = b[num1] + c[num2];
-    flags[0] = 0;
+    flags[0] = 1;
+    flags[1] = 0;
+    flags[2] = 0;
   }
   else{
   a[0] = b[num1] + c[num2];
+  flags[0] = 0;
+  flags[1] = 0;
   flags[2] = 0;
   }
 }
 /*this function is used to implement the subtract command*/
 void subtract(int flags[],int a[], int b[], int num1, int c[], int num2){
  if ( (c[num2] - b[num1]) > 127 || (c[num2] - b[num1]) < -128){
-   printf("I'm in here\n");
    a[0] = 128;
+   flags[0] = 0;
+   flags[1] = 0;
    flags[2] = 1;
  }
- /* 
  else if ( c[num2] - b[num1] < 0){
-   printf("I'm in here\n");
    a[0] = c[num2] - b[num1];
+   flags[0] = 0;
    flags[1] = 1;
+   flags[2] = 0;
  }
  else if ( c[num2] - b[num1] == 0){
    a[0] = 0;
    flags[0] = 1;
- }*/
+   flags[1] = 0;
+   flags[2] = 0;
+ }
  else{
    a[0] = c[num2] - b[num1];
+   flags[0] = 0;
+   flags[1] = 0;
    flags[2] = 0;
  }
 }
@@ -326,18 +339,26 @@ void subtract(int flags[],int a[], int b[], int num1, int c[], int num2){
 void multiply(int flags[],int a[], int b[], int num1, int c[], int num2){
  if ((b[num1]*c[num2]) > 127 || (c[num2] * b[num1]) < -128){
    a[0] = 128;
+   flags[0] = 0;
+   flags[1] = 0;
    flags[2] = 1;
  }
  else if ( b[num1] * c[num2] < 0){
    a[0] = b[num1] * c[num2];
+   flags[0] = 0;
    flags[1] = 1;
+   flags[2] = 0;
  }
  else if ((b[num1] * c[num2]) == 0){
    a[0] = b[num1] * c[num2];
    flags[0] = 1;
+   flags[1] = 0;
+   flags[2] = 0;
  }
  else{
    a[0] = b[num1] * c[num2];
+   flags[0] = 0;
+   flags[1] = 0;
    flags[2] = 0;
  }
 }
@@ -345,18 +366,26 @@ void multiply(int flags[],int a[], int b[], int num1, int c[], int num2){
 void divide(int flags[],int a[], int b[], int num1, int c[], int num2){
  if ((b[num1] / c[num2]) > 127 || (c[num2] / b[num1]) < -128){
    a[0] = 128;
+   flags[0] = 0;
+   flags[1] = 0;
    flags[2] = 1;
  }
  else if ( b[num1] / c[num2] < 0){
    a[0] = b[num1] / c[num2];
+   flags[0] = 0;
    flags[1] = 1;
+   flags[2] = 0;
  }
  else if ((b[num1] / c[num2]) == 0){
    a[0] = b[num1] / c[num2];
    flags[0] = 1;
+   flags[1] = 0;
+   flags[2] = 0;
  }
  else{
    a[0] = b[num1] / c[num2];
+   flags[0] = 0;
+   flags[1] = 0;
    flags[2] = 0;
  }
 }
@@ -364,18 +393,26 @@ void divide(int flags[],int a[], int b[], int num1, int c[], int num2){
 void mod(int flags[],int a[], int b[], int num1, int c[], int num2){
  if ((b[num1] % c[num2]) > 127 || (c[num2] % b[num1]) < -128){
    a[0] = 128;
+   flags[0] = 0;
+   flags[1] = 0;
    flags[2] = 1;
  }
  else if ( b[num1] % c[num2] < 0){
    a[0] = b[num1] % c[num2];
+   flags[0] = 0;
    flags[1] = 1;
+   flags[2] = 0;
  }
  else if ((b[num1] % c[num2]) == 0){
    a[0] = b[num1] % c[num2];
    flags[0] = 1;
+   flags[1] = 0;
+   flags[2] = 0;
  }
  else{
    a[0] = b[num1] % c[num2];
+   flags[0] = 0;
+   flags[1] = 0;
    flags[2] = 0;
  }
 }
