@@ -430,13 +430,16 @@ void comp(int flags[], int registers[], int pos1, int pos2){
   if (registers[pos1] > registers[pos2]){
     flags[0] = 0;
     flags[1] = 1;
+    flags[2] = 0;
   }
   else if (registers[pos1] < registers[pos2]){
     flags[0] = 0;
     flags[1] = 0;
+    flags[0] = 0;
   }
   else if (registers[pos1] == registers[pos2]){
     flags[0] = 1;
     flags[1] = 0;
+    flags[2] = 0;
   }
 }

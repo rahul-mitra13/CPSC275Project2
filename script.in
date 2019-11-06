@@ -9,6 +9,10 @@ prints
 read 2, m3
 mult m3,r1
 prints
+read -9, r3
+read 1, m6
+div  r3,m6
+prints
 comp r0,r1
 move r1,r3
 prints
